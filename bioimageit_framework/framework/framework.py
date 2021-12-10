@@ -39,7 +39,7 @@ class BiActuator:
             catched action
         
         """
-        method_name = f'{action.emitter.name}_{action.name}'
+        method_name = f'callback_{action.name}'
         if hasattr(self.__class__, method_name) and callable(getattr(self.__class__, method_name)):
             getattr(self, method_name)(action)
                             
@@ -81,7 +81,7 @@ class BiContainer:
         """
         self.actuators.append(obj)
 
-    def emit(self, action_name, state=None, emitter=None):
+    def emit(self, action_name):
         """Emit an action
 
         Parameters
@@ -92,18 +92,9 @@ class BiContainer:
             Unique name of the action
         
         """
-        _emitter = emitter
-        if emitter is None:
-            _emitter = self
-
-        action = BiAction(action_name, state, _emitter)
+        action = BiAction(action_name, self)
         for actuator in self.actuators:
-            if isinstance(actuator, BiActuator):
-                print('comes from an actuator call update')
-                actuator.update(action)
-            else:
-                print('is not an actuator call as a method')    
-                actuator(action)     
+            actuator.update(action)    
 
 
 class BiAction:
@@ -119,9 +110,9 @@ class BiAction:
         Name of the action. It identify the action
 
     """
-    def __init__(self, name, state):
+    def __init__(self, name, container):
         self.name = name
-        self.state = state 
+        self.container = container 
 
 
 class BiComponent(BiActuator):
