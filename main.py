@@ -8,6 +8,8 @@ from bioimageit_framework.theme import BiThemeAccess, BiThemeSheets
 from bioimageit_framework.widgets import BiButtonDanger, BiFileSelector, BiGroupBox, BiLineEdit
 
 
+
+
 if __name__ == '__main__':
     # Create the Qt Application
     app = QApplication(["BioImageIT"])

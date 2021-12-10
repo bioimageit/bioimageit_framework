@@ -1,13 +1,13 @@
 from .exceptions import CommandArgsError
-from .framework import (BiObject, BiAction, BiStates, 
-                        BiContainer, BiActuator, BiComponent, 
-                        BiModel)
+from .framework import (BiAction, BiContainer, BiActuator, BiComponent)
+from .composer import BiVComposer, BiHComposer, BiGridComposer
 
 __all__ = ['CommandArgsError',
            'BiObject',
-           'BiAction',
-           'BiStates', 
+           'BiAction', 
            'BiContainer',
            'BiActuator',
-           'BiComponent', 
-           'BiModel']
+           'BiComponent',
+           'BiVComposer',
+           'BiHComposer',
+           'BiGridComposer']
