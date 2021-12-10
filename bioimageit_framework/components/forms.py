@@ -49,6 +49,17 @@ class BiGroupBox(BiComponent):
 
 
 class BiFileSelector(BiComponent):
+    """File or directory selection
+    
+    Display a line edit and a button to select a file or 
+    a directory
+
+    Parameters
+    ----------
+    is_dir: bool
+        True to select a directory, False to select a file
+    
+    """
     CHANGED = 'changed'
 
     def __init__(self, is_dir=False):
