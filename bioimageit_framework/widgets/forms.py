@@ -2,9 +2,9 @@ import qtpy.QtCore
 from qtpy.QtWidgets import QLineEdit, QSpinBox, QComboBox, QGroupBox, QHBoxLayout, QPushButton, QFileDialog
 
 from bioimageit_framework.framework import BiComponent
+from .widget import BiWidget
 
-
-class BiLineEdit(BiComponent):
+class BiLineEdit(BiWidget):
     """Line edit widget"""
     CHANGED = 'changed'
     
@@ -22,7 +22,7 @@ class BiLineEdit(BiComponent):
         self.emit(BiLineEdit.CHANGED)   
 
 
-class BiSpinBox(BiComponent):
+class BiSpinBox(BiWidget):
     """Spin box widget"""
     def __init__(self, value=0):
         super().__init__()
@@ -31,7 +31,7 @@ class BiSpinBox(BiComponent):
         self.widget.setAttribute(qtpy.QtCore.Qt.WA_MacShowFocusRect, False)      
 
 
-class BiSelectorBox(BiComponent):
+class BiSelectorBox(BiWidget):
     """Selector widget"""
     def __init__(self):
         super().__init__()
@@ -40,7 +40,7 @@ class BiSelectorBox(BiComponent):
         self.widget.setAttribute(qtpy.QtCore.Qt.WA_MacShowFocusRect, False) 
 
 
-class BiGroupBox(BiComponent):
+class BiGroupBox(BiWidget):
     """Group box widget"""
     def __init__(self, title):
         super().__init__(title)
@@ -48,7 +48,7 @@ class BiGroupBox(BiComponent):
         self.setObjectName('bi-group-box')
 
 
-class BiFileSelector(BiComponent):
+class BiFileSelector(BiWidget):
     """File or directory selection
     
     Display a line edit and a button to select a file or 

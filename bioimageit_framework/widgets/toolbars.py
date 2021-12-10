@@ -3,6 +3,7 @@ from qtpy.QtWidgets import QWidget, QHBoxLayout, QToolButton
 
 from bioimageit_framework.theme import BiThemeAccess
 from bioimageit_framework.framework import BiComponent
+from .widget import BiWidget
 
 
 class QIdToolButton(QToolButton):
@@ -17,7 +18,7 @@ class QIdToolButton(QToolButton):
         self.pushed.emit(self.id)
 
 
-class BiToolBar(BiComponent):
+class BiToolBar(BiWidget):
     def __init__(self):
         super().__init__()
         self.name = 'toolbar'

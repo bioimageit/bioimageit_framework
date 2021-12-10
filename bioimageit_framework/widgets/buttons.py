@@ -1,9 +1,10 @@
 from qtpy.QtWidgets import QPushButton, QMessageBox
 
 from bioimageit_framework.framework import BiComponent
+from .widget import BiWidget
 
 
-class BiButtonDefault(BiComponent):
+class BiButtonDefault(BiWidget):
     CLICKED = 'clicked'
     """Default button
 
@@ -21,7 +22,7 @@ class BiButtonDefault(BiComponent):
         self.emit(BiButtonDefault.CLICKED) 
 
         
-class BiButtonPrimary(BiComponent):
+class BiButtonPrimary(BiWidget):
     CLICKED = 'clicked'
     """Primary button
 
@@ -39,7 +40,7 @@ class BiButtonPrimary(BiComponent):
         self.emit(BiButtonPrimary.CLICKED)    
   
      
-class BiButtonDanger(BiComponent):
+class BiButtonDanger(BiWidget):
     CLICKED = 'clicked'
     
     """Danger button
