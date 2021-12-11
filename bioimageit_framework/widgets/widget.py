@@ -2,6 +2,9 @@
 
 """
 
+from qtpy.QtWidgets import QMessageBox
+
+
 class BiWidget:
     """Base widget
 
@@ -23,3 +26,10 @@ class BiWidget:
             for connection in self.connections[signal]:
                 connection(self)
 
+
+def showInfoBox(text):
+    msgBox = QMessageBox()
+    msgBox.setIcon(QMessageBox.Information)
+    msgBox.setText(text)
+    msgBox.setWindowTitle("Message")
+    msgBox.exec()

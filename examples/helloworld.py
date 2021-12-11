@@ -6,7 +6,7 @@ from qtpy.QtWidgets import QApplication
 
 from bioimageit_framework.framework import BiComponent, BiContainer, BiActuator
 from bioimageit_framework.theme import BiThemeAccess, BiThemeSheets
-from bioimageit_framework.widgets import BiButtonPrimary, BiLineEdit, BiVComposer
+from bioimageit_framework.widgets import BiButtonPrimary, BiLineEdit, BiVComposer, showInfoBox
 
 
 class HelloContainer(BiContainer):
@@ -23,8 +23,8 @@ class HelloModel(BiActuator):
         super().__init__()
 
     def callback_changed(self, action):
-        print('HelloModel: Save the text to file:', action.container.text)
-        print('HelloModel: emit saved')
+        with open('helloworld.txt', 'w') as output:
+            output.write(action.container.text)
         action.container.emit(HelloContainer.SAVED)    
 
 
@@ -34,19 +34,18 @@ class HelloComponent(BiComponent):
 
         composer = BiVComposer()
         self.line_edit = BiLineEdit()
-        self.button = BiButtonPrimary('Click to print')
+        self.button = BiButtonPrimary('Save')
         self.button.connect(BiButtonPrimary.CLICKED, self.clicked)
         composer.add(self.line_edit) 
         composer.add(self.button)
         self.widget = composer.widget
 
-    def clicked(self, origin):
-        print('HelloComponent: hello ', self.line_edit.text()) 
+    def clicked(self, origin): 
         self.container.text = self.line_edit.text()
         self.container.emit(HelloContainer.CHANGED)
 
     def callback_saved(self, action):
-        print('HelloComponent: open the message box')       
+        showInfoBox(f'{self.container.text} have been saved')      
 
 
 if __name__ == '__main__':
