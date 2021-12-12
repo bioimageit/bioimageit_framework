@@ -8,137 +8,158 @@ components (or widgets)
 
 Classes
 ------- 
-BiActuator
-BiContainer
+BiNotification
 BiAction
-BiComponent
+BiContainer
+BiActuator
+BiConnectomeContainer
 BiConnectome
+
 """
 
-class BiActuator:
-    """Actuator base class
+class BiNotification:
+    """Definition of a notification
 
-    An actuator is an object that can emit and receive actions.
-    The update method is called when a action is recived 
-    
+    A notification is a signal emitted by a data container 
+    to notify actuator of a data or state change  
+
+    Parameters
+    ----------
+    name: str
+        Unique id of the notification
+    emitter: BiContainer
+        Container that emitted the notification
+
+    """
+    def __init__(self, name='', emitter=None):
+        self.name = name
+        self.emitter = emitter    
+
+
+class BiAction:
+    """Definition of an action
+
+    An action is en event emitted by an actuator for containers. This event
+    contains an task for the container.
+
+    Parameters
+    ----------
+    name: str
+        Unique id of the task to be executed by the container
+    emitter: BiActuator
+        Actuator that emitted the signal
+    """        
+
+
+class BiContainer:
+    """Definition of a container
+
+    A container is an object that store the data of a sub-part
+    of the application. A container emit notifications when its
+    data are updates, and recieve actions from ACtuators to update
+    the data.
+
     """
     def __init__(self):
-        super().__init__()
-        self.name = 'BiActuator'
-        self.container = None
+        self.name = 'container'
+        self._actuators = []
 
-    def update(self, action):
-        """Implements the actions to perform
+    def connect(self, actuator):
+        """Connect a new actuator to this container
 
-        All the actions should be implemented as callback function whose
-        names are '{action.emitter.name}_{action.name}'
+        The connected actuator will then recieve the notification
+        from this container
+
+        """
+        self._actuators.append(actuator)
+
+    def _notify(self, name):
+        """Emit notification to the connected actuators
+
+        Parameters
+        ----------
+        name: str
+            Unique id of the notification
+        """        
+        for actuator in self._actuators:
+            actuator.update(BiNotification(name, self))
+
+    def update(self, action, args):
+        """Update the data when an action is recieved
+
+        This method call a callback method name similarly to 
+        the action name
 
         Parameters
         ----------
         action: BiAction
-            catched action
-        
-        """
-        method_name = f'callback_{action.name}'
+            Recieved action
+
+        """         
+        method_name = f'action_{action.name}'
         if hasattr(self.__class__, method_name) and callable(getattr(self.__class__, method_name)):
-            getattr(self, method_name)(action)
-                            
+            getattr(self, method_name)(action, *args)
 
-class BiContainer:
-    """Container of states
 
-    This object allows to store a component states and possible actions
-
-    Actions names should be defined as class string attributes and states data as
-    object attributes
-
-    Attributes
-    ----------
-    name: str
-        Unique name to identify the container
-    
-    """  
+class BiActuator:
     def __init__(self):
-        self.name = 'BiContainer'
-        self.actuators = []
+        self.name = 'actuator'
+        self._containers = []
 
-    def actions(self):
-        dict_actions = self.__class__.__dict__
-        actions = {}
-        for key in dict_actions:
-            if not key.startswith('__') and isinstance(dict_actions[key], str):
-                actions[key] = dict_actions[key]
-        return actions 
+    def connect(self, container):
+        """Connect a new container to the actuator
 
-    def register(self, obj):
-        """Register an Actuator to this Actionable
+        The container will the recieve the actions from the 
+        actuator
 
         Parameters
         ----------
-        obj: BiActuator
-            Actuator to register
+        container: BiContainer
+            Container to connect
 
         """
-        self.actuators.append(obj)
+        self._containers.append(container) 
 
-    def emit(self, action_name):
-        """Emit an action
+    def _emit(self, name, args):
+        """Emit an action to the connected containers
 
         Parameters
         ----------
-        state: BiContainer
-            State of the actionable
-        action_name: str
-            Unique name of the action
-        
-        """
-        action = BiAction(action_name, self)
-        for actuator in self.actuators:
-            actuator.update(action)    
+        name: str
+            Unique ID of the actions
+        args: tuple
+            List of data to be updated
 
+        """ 
+        for container in self._containers:
+            container.update(BiAction(name, self), args)
 
-class BiAction:
-    """Action container
+    def update(self, notification):
+        """Update the actuator when an notification is recieved
 
-    An action is an object emitter by Actuators
+        This method call a callback method name similarly to 
+        the notification name
 
-    Attributes
-    ----------
-    state: BiContainer
-        Modified state
-    name: str
-        Name of the action. It identify the action
+        Parameters
+        ----------
+        notification: BiNotification
+            Recieved notification
 
-    """
-    def __init__(self, name, container):
-        self.name = name
-        self.container = container 
-
-
-class BiComponent(BiActuator):
-    """Base GUI component
-    
-    Components are actionable widgets for the graphical interface
-
-    """
-    def __init__(self):
-        super().__init__()
-        self.name = 'BiWidget'    
-        self.widget = None # QWidget
-
-    def get_widget(self):  
-        return self.widget   
+        """         
+        method_name = f'callback_{notification.name}'
+        if hasattr(self.__class__, method_name) and callable(getattr(self.__class__, method_name)):
+            getattr(self, method_name)(notification)             
 
 
 class BiConnectomeContainer:
-    """Container fot the connectome"""
+    """Container for the connectome"""
     def __init__(self, theme_dir=''):
-        self.connections = {}   
+        self.connections = {}  # list of all the connections 
 
     def connect(self, container, actuator):
         # do the connection
-        container.register(actuator)
-        actuator.container = container
+        container.connect(actuator)
+        actuator.connect(container)
 
         # add to the list
         if container in self.connections:
