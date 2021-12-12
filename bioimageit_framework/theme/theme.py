@@ -102,4 +102,5 @@ class BiThemeAccess:
         """ Static access method to the Config. """
         if BiThemeAccess.__instance is None:
             BiThemeAccess.__instance = BiTheme()
-        return BiThemeAccess.__instance        
+        return BiThemeAccess.__instance   
+     

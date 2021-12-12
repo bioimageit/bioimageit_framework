@@ -12,6 +12,7 @@ BiNotification
 BiAction
 BiContainer
 BiActuator
+BiComponent
 BiConnectomeContainer
 BiConnectome
 
@@ -49,7 +50,9 @@ class BiAction:
     emitter: BiActuator
         Actuator that emitted the signal
     """        
-
+    def __init__(self, name='', emitter=None):
+        self.name = name
+        self.emitter = emitter 
 
 class BiContainer:
     """Definition of a container
@@ -130,8 +133,8 @@ class BiActuator:
         args: tuple
             List of data to be updated
 
-        """ 
-        for container in self._containers:
+        """
+        for container in self._containers:  
             container.update(BiAction(name, self), args)
 
     def update(self, notification):
@@ -149,6 +152,15 @@ class BiActuator:
         method_name = f'callback_{notification.name}'
         if hasattr(self.__class__, method_name) and callable(getattr(self.__class__, method_name)):
             getattr(self, method_name)(notification)             
+
+
+class BiComponent(BiActuator):
+    def __init__(self):
+        super().__init__()
+        self.widget = None # QWidget
+
+    def get_widget(self):
+        return self.widget    
 
 
 class BiConnectomeContainer:

@@ -4,7 +4,7 @@ from bioimageit_framework.framework.framework import BiConnectome
 
 from qtpy.QtWidgets import QApplication
 
-from bioimageit_framework.framework import BiComponent, BiContainer, BiActuator
+from bioimageit_framework.framework import BiConnectome, BiComponent, BiContainer, BiActuator
 from bioimageit_framework.theme import BiThemeAccess, BiThemeSheets
 from bioimageit_framework.widgets import BiButtonPrimary, BiLineEdit, BiVComposer, showInfoBox
 
@@ -15,7 +15,17 @@ class HelloContainer(BiContainer):
 
     def __init__(self):
         super().__init__()
-        self.text = ''
+        self.text1 = ''
+        self.text2 = ''
+
+    def action_change_text(self, action, text1, text2):
+        """Action callback to update the text"""
+        self.text1 = text1
+        self.text2 = text2
+        self._notify(HelloContainer.CHANGED) 
+
+    def action_saved(self, action):
+        self._notify(HelloContainer.SAVED)            
 
 
 class HelloModel(BiActuator):
@@ -24,28 +34,31 @@ class HelloModel(BiActuator):
 
     def callback_changed(self, action):
         with open('helloworld.txt', 'w') as output:
-            output.write(action.container.text)
-        action.container.emit(HelloContainer.SAVED)    
+            output.write(f'{action.emitter.text1}, {action.emitter.text2}')
+        self._emit(HelloContainer.SAVED, ())    
 
 
 class HelloComponent(BiComponent):
+    CHANGE_TEXT = 'change_text'
+
     def __init__(self):
         super().__init__()
 
         composer = BiVComposer()
-        self.line_edit = BiLineEdit()
+        self.line_edit1 = BiLineEdit()
+        self.line_edit2 = BiLineEdit()
         self.button = BiButtonPrimary('Save')
         self.button.connect(BiButtonPrimary.CLICKED, self.clicked)
-        composer.add(self.line_edit) 
+        composer.add(self.line_edit1)
+        composer.add(self.line_edit2)  
         composer.add(self.button)
         self.widget = composer.widget
 
     def clicked(self, origin): 
-        self.container.text = self.line_edit.text()
-        self.container.emit(HelloContainer.CHANGED)
+        self._emit(HelloComponent.CHANGE_TEXT, (self.line_edit1.text(), self.line_edit2.text()))
 
     def callback_saved(self, action):
-        showInfoBox(f'{self.container.text} have been saved')      
+        showInfoBox(f'{action.emitter.text1}, {action.emitter.text2} have been saved')      
 
 
 if __name__ == '__main__':
