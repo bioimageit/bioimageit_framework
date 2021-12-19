@@ -14,6 +14,7 @@ class BiButtonDefault(BiWidget):
     def __init__(self, title=''):
         super().__init__()
         self.name = "BiButtonDefault"
+        self.content = {}
         self.widget = QPushButton(title)
         self.widget.setObjectName('btn-default')
         self.widget.clicked.connect(self._clicked)
@@ -32,6 +33,7 @@ class BiButtonPrimary(BiWidget):
     def __init__(self, title=''):
         super().__init__()
         self.name = "BiButtonPrimary"
+        self.content = {}
         self.widget = QPushButton(title)
         self.widget.setObjectName('btn-primary')
         self.widget.clicked.connect(self._clicked)
@@ -57,6 +59,7 @@ class BiButtonDanger(BiWidget):
     def __init__(self, title='', popup=True):
         super().__init__(title)
         self.name = "BiButtonDanger"
+        self.content = {}
         self.popup = popup
         self.confirm_text = 'Are you sure ?'
 
