@@ -259,7 +259,6 @@ class BiForm(BiWidget):
 
     def _emit_validate(self):
         # fill content and emit validated
-        print('fill content')
         for key in self.widgets:
             widget = self.widgets[key]
             if isinstance(widget, QLineEdit):
@@ -272,3 +271,31 @@ class BiForm(BiWidget):
                 self.content[key] = widget.text()   
         print('BiForm emit validated')
         self.emit(BiForm.VALIDATED)
+
+    def build(self, form):
+        """Build a form from a dictionnary
+
+        Parameters
+        ----------
+        form: dict
+            Dictionnary that describe the form
+
+        """ 
+        data = form['form']
+        for item in data:
+            type = item['type']
+            if type == 'group_box':
+                self.add_group_box(item['title'])  
+                self.build({'form': item['form']}) 
+            elif type == 'line_edit':
+                self.add_line_edit(item['key'], item['label'])     
+            elif type == 'int_edit':
+                self.add_int_edit(item['key'], item['label'])    
+            elif type == 'file_select':
+                self.add_file_select(item['key'], item['label']) 
+            elif type == 'select_box':
+                self.add_select_box(item['key'], item['label'], item['items'])     
+            elif type == 'validate_button':
+                self.add_validate_button(item['title'], item['callback'])   
+            elif type == 'bottom_spacer':
+                self.add_bottom_spacer()       
