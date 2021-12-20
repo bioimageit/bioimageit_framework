@@ -13,6 +13,7 @@ class BiWidget:
     """
     def __init__(self):
         self.widget = None # QWidget
+        self.content = {}
         self.connections = {}
 
     def connect(self, signal, method):

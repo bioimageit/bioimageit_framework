@@ -49,13 +49,13 @@ QSpinBox::down-button {
 }
 
 QSpinBox::up-arrow {
-  image: url(up-arrow.svg);
+  image: url(%up-arrow.svg%);
   width: 10px;
   height: 10px;
 }
 
 QSpinBox::down-arrow {
-  image: url(angle-arrow-down.svg);
+  image: url(%down-arrow.svg%);
   width: 10px;
   height: 10px;
 }
@@ -101,7 +101,7 @@ QComboBox::drop-down {
 }
 
 QComboBox::down-arrow {
-    image: url(angle-arrow-down.svg);
+    image: url(%down-arrow.svg%);
     width: 10px;
     height: 10px;
     padding-right: 4px;

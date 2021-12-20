@@ -7,7 +7,16 @@ class BiThemeIcons:
     This is a static list of all the logo available your theme
 
     """
-    LOGO = 'logo'
+    LOGO = 'logo.png'
+    UP_ARROW = 'up-arrow.svg'
+    DOWN_ARROW = 'down-arrow.svg'
+
+    @staticmethod
+    def icons():
+        return [BiThemeIcons.LOGO, 
+                BiThemeIcons.UP_ARROW,
+                BiThemeIcons.DOWN_ARROW
+               ]
 
 
 class BiThemeSheets:
@@ -23,9 +32,9 @@ class BiThemeSheets:
 
     @staticmethod
     def sheets():
-        return [BiThemeSheets.BUTTONS, 
+        return [BiThemeSheets.MAIN,
+                BiThemeSheets.BUTTONS, 
                 BiThemeSheets.FORMS,
-                BiThemeSheets.MAIN,
                 BiThemeSheets.TABLES
                ]
 
@@ -75,6 +84,9 @@ class BiTheme:
             file = open(self.style(sheet_name),mode='r')
             style_str += file.read()
             file.close()
+
+        for icon in BiThemeIcons.icons():
+            style_str = style_str.replace(f'%{icon}%', os.path.join(self.theme_dir, icon)) 
 
         app.setStyleSheet(style_str)    
 
