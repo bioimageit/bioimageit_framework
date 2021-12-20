@@ -1,7 +1,8 @@
+from PySide2.QtWidgets import QVBoxLayout
 import qtpy.QtCore
 from qtpy.QtWidgets import (QLineEdit, QSpinBox, QComboBox, QGroupBox, 
                             QHBoxLayout, QPushButton, QFileDialog,
-                            QWidget, QGridLayout, QLabel)
+                            QWidget, QGridLayout, QLabel, QGroupBox)
 
 from .widget import BiWidget
 
@@ -67,7 +68,6 @@ class BiFileSelector(BiWidget):
     def __init__(self, is_dir=False):
         super().__init__()
 
-
         self.widget = QWidget()
         self.is_dir = is_dir
 
@@ -82,6 +82,8 @@ class BiFileSelector(BiWidget):
         browse_btn.setObjectName('btn-default')
         layout.addWidget(browse_btn)
         browse_btn.released.connect(self.browse)
+
+        self.widget.setStyleSheet(".QWidget{background-color: transparent;}")
 
     def browse(self):
         if self.is_dir:
@@ -106,10 +108,63 @@ class BiForm(BiWidget):
         super().__init__()
         self.name = 'form'
         self._row_count = -1
-        self.widget = QWidget()
-        self.layout = QGridLayout()
-        self.widget.setLayout(self.layout)
+        self._group_boxes = []
+        self._group_row_count = -1
         self.widgets = {}
+
+        # main widget
+        self.widget = QWidget()
+
+        self.layout = QGridLayout()
+        
+        _global_layout = QVBoxLayout()
+        _global_layout.setContentsMargins(0, 0, 0, 0)
+        self._widget = QWidget()
+        self._widget.setLayout(self.layout)
+        self.widget.setLayout(_global_layout)
+        _global_layout.addWidget(self._widget, 0, qtpy.QtCore.Qt.AlignHCenter)
+
+        
+
+    def set_maximum_width(self, width):
+        self._widget.setMaximumWidth(width)
+
+    def add_group_box(self, title):
+        group_box = QGroupBox(title)
+        group_box_layout = QGridLayout()
+        group_box.setLayout(group_box_layout)
+        self._group_boxes.append(group_box_layout)
+        self._row_count += 1
+        self.layout.addWidget(group_box, self._row_count, 0, 1, 2)
+        self._group_row_count = -1
+
+
+    def _next_row_idx(self):
+        """Calculate the next row index
+
+        Return
+        ------
+        The next row index for the groupbox or main layout
+
+        """
+        if len(self._group_boxes) > 0:
+            self._group_row_count += 1
+            return self._group_row_count
+        else:    
+            self._row_count += 1
+            return self._row_count
+
+    def _layout(self):
+        if len(self._group_boxes) > 0:
+            return self._group_boxes[len(self._group_boxes)-1]
+        else:
+            return self.layout     
+
+    def _new_label(self, title):
+        label = QLabel(title)
+        if len(self._group_boxes) > 0:
+            label.setObjectName('bi-label-groupbox')
+        return label    
 
     def add_line_edit(self, key, label):
         """Add a line edit entry to the form
@@ -122,13 +177,13 @@ class BiForm(BiWidget):
             Label printed to the user  
 
         """
-        self._row_count += 1
-        self.layout.addWidget(QLabel(label), self._row_count, 0)
+        row = self._next_row_idx()
+        self._layout().addWidget(self._new_label(label), row, 0)
         line_edit = QLineEdit()
         line_edit.setAttribute(qtpy.QtCore.Qt.WA_StyledBackground, True)
         line_edit.setAttribute(qtpy.QtCore.Qt.WA_MacShowFocusRect, False)
         self.widgets[key] = line_edit
-        self.layout.addWidget(line_edit, self._row_count, 1)
+        self._layout().addWidget(line_edit, row, 1)
 
     def add_int_edit(self, key, label):
         """Add a spin box entry to the form for integers
@@ -141,13 +196,13 @@ class BiForm(BiWidget):
             Label printed to the user   
 
         """
-        self._row_count += 1
-        self.layout.addWidget(QLabel(label), self._row_count, 0)
+        row = self._next_row_idx()
+        self._layout().addWidget(self._new_label(label), row, 0)
         edit = QSpinBox()
         edit.setAttribute(qtpy.QtCore.Qt.WA_StyledBackground, True)
         edit.setAttribute(qtpy.QtCore.Qt.WA_MacShowFocusRect, False)
         self.widgets[key] = edit
-        self.layout.addWidget(edit, self._row_count, 1)
+        self._layout().addWidget(edit, row, 1)
 
     def add_select_box(self, key, label, items):
         """Add a select box (combobox) entry to the form
@@ -162,11 +217,12 @@ class BiForm(BiWidget):
             List of items in the select widget  
 
         """
-        self._row_count += 1
-        self.layout.addWidget(QLabel(label), self._row_count, 0)
+        row = self._next_row_idx()
+        self._layout().addWidget(self._new_label(label), row, 0)
         edit = QComboBox()
         edit.addItems(items)
-        self.layout.addWidget(edit, self._row_count, 1)
+        self.widgets[key] = edit
+        self._layout().addWidget(edit, row, 1)
 
     def add_file_select(self, key, label):
         """Add a select box (combobox) entry to the form
@@ -181,19 +237,18 @@ class BiForm(BiWidget):
             List of items in the select widget  
 
         """
-        self._row_count += 1
-        self.layout.addWidget(QLabel(label), self._row_count, 0, 1, 1, qtpy.QtCore.Qt.AlignTop)
+        row = self._next_row_idx()
+        self._layout().addWidget(self._new_label(label), row, 0, 1, 1, qtpy.QtCore.Qt.AlignTop)
         edit = BiFileSelector()
         self.widgets[key] = edit
-        self.widgets[key] = edit
-        self.layout.addWidget(edit.widget, self._row_count, 1, 1, 1, qtpy.QtCore.Qt.AlignTop)        
+        self._layout().addWidget(edit.widget, row, 1, 1, 1, qtpy.QtCore.Qt.AlignTop)        
 
     def add_validate_button(self, title, callback):
         self._row_count += 1
         btn = QPushButton(title)
         btn.setObjectName('btn-primary')
         btn.released.connect(self._emit_validate)
-        self.layout.addWidget(btn, self._row_count, 0, 1, 2, qtpy.QtCore.Qt.AlignLeft)  
+        self.layout.addWidget(btn, self._row_count, 0, 1, 2, qtpy.QtCore.Qt.AlignRight)  
         self.connect(BiForm.VALIDATED, callback)
 
     def add_bottom_spacer(self):
@@ -204,5 +259,16 @@ class BiForm(BiWidget):
 
     def _emit_validate(self):
         # fill content and emit validated
+        print('fill content')
+        for key in self.widgets:
+            widget = self.widgets[key]
+            if isinstance(widget, QLineEdit):
+                self.content[key] = widget.text()
+            elif isinstance(widget, QSpinBox):
+                self.content[key] = widget.value()
+            elif isinstance(widget, QComboBox):
+                self.content[key] = widget.currentText()
+            elif isinstance(widget, BiFileSelector):
+                self.content[key] = widget.text()   
         print('BiForm emit validated')
         self.emit(BiForm.VALIDATED)

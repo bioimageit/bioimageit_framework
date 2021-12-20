@@ -20,11 +20,15 @@ class MyForm(BiWidget):
         self.form = BiForm()
         self.widget = self.form.widget
 
-        self.form.add_line_edit('name', 'Name') # key, label
+        self.form.add_group_box('Profile')
         self.form.add_line_edit('firstname', 'Firstname')
+        self.form.add_line_edit('name', 'Name') # key, label
         self.form.add_int_edit('age', 'Age')
-        self.form.add_select_box('job', 'Job', ['front-end dev', 'back-end dev', 'full-stack dev'])
         self.form.add_file_select('avatar', 'Avatar')
+
+        self.form.add_group_box('Skills')
+        self.form.add_select_box('job', 'Job', ['front-end dev', 'back-end dev', 'full-stack dev'])
+        
         self.form.add_validate_button('Save', self.form_saved)
         self.form.add_bottom_spacer()
         self.form.set_maximum_width(500)
