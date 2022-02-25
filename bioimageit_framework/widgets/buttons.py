@@ -1,4 +1,6 @@
-from qtpy.QtWidgets import QPushButton, QMessageBox
+import qtpy.QtCore
+from qtpy.QtCore import Signal
+from qtpy.QtWidgets import QWidget, QPushButton, QMessageBox, QVBoxLayout
 
 from bioimageit_framework.framework import BiComponent
 from .widget import BiWidget
@@ -80,3 +82,34 @@ class BiButtonDanger(BiWidget):
                 self.emit(BiButtonPrimary.CLICKED)
         else:
             self.emit(BiButtonPrimary.CLICKED)
+
+
+class BiClosableButton(QPushButton):
+    clicked = Signal(int)
+    closed = Signal(int)
+
+    def __init__(self, closable: bool = True,  parent: QWidget = None):
+        super().__init__(parent)
+        self._id = -1
+        if closable:
+            layout = QVBoxLayout()
+            layout.setContentsMargins(0,0,0,0)
+            closeButton = QPushButton()
+            closeButton.setObjectName("bi-close-button")
+            closeButton.setFixedSize(12,12)
+            layout.addWidget(closeButton, 1, qtpy.QtCore.Qt.AlignTop | qtpy.QtCore.Qt.AlignRight)
+            self.setLayout(layout)
+            closeButton.pressed.connect(self.emitClosed)
+        self.pressed.connect(self.emitClicked)    
+
+    def id(self) -> int:
+        return self._id
+
+    def setId(self, id: int):
+        self._id = id
+
+    def emitClicked(self):
+        self.clicked.emit(self._id)
+
+    def emitClosed(self):
+        self.closed.emit(self._id)

@@ -59,5 +59,3 @@ class BiGridComposer:
 
     def add(self, component, row, col, row_span, col_span):
         self.layout.addWidget(component.widget, row, col, row_span, col_span)            
-
-   

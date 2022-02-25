@@ -29,13 +29,17 @@ class BiThemeSheets:
     BUTTONS = 'buttons'
     FORMS = 'forms'
     TABLES = 'tables'
+    TOOLBARS = 'toolbars'
+    APP = 'app'
 
     @staticmethod
     def sheets():
         return [BiThemeSheets.MAIN,
                 BiThemeSheets.BUTTONS, 
                 BiThemeSheets.FORMS,
-                BiThemeSheets.TABLES
+                BiThemeSheets.TABLES,
+                BiThemeSheets.TOOLBARS,
+                BiThemeSheets.APP
                ]
 
 

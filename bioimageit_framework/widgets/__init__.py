@@ -3,6 +3,10 @@ from .forms import BiLineEdit, BiForm
 from .composer import BiVComposer, BiHComposer, BiGridComposer
 from .widget import BiWidget, showInfoBox
 from .tables import BiTable
+from .tabwidget import BiTabWidget
+from .toolbars import BiToolBar, QIdToolButton
+from .appbar import BiAppBar, BiAppMainWidget
+from .navbar import BiNavigationBar
 
 __all__ = ['BiWidget',
            'BiButtonDefault',
@@ -14,4 +18,10 @@ __all__ = ['BiWidget',
            'BiHComposer',
            'BiGridComposer',
            'showInfoBox',
-           'BiTable']
+           'BiTable',
+           'BiTabWidget',
+           'BiToolBar',
+           'QIdToolButton',
+           'BiAppBar',
+           'BiAppMainWidget',
+           'BiNavigationBar']

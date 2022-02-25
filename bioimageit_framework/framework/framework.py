@@ -101,7 +101,12 @@ class BiContainer:
         """         
         method_name = f'action_{action.name}'
         if hasattr(self.__class__, method_name) and callable(getattr(self.__class__, method_name)):
-            getattr(self, method_name)(action, *args)
+            if args is None:
+                getattr(self, method_name)(action)
+            elif type(args) is list:
+                getattr(self, method_name)(action, *args)
+            else:
+                getattr(self, method_name)(action, args)    
 
 
 class BiActuator:
@@ -123,7 +128,7 @@ class BiActuator:
         """
         self._containers.append(container) 
 
-    def _emit(self, name, args):
+    def _emit(self, name, args=None):
         """Emit an action to the connected containers
 
         Parameters
@@ -135,7 +140,7 @@ class BiActuator:
 
         """
         for container in self._containers:  
-            container.update(BiAction(name, self), args)
+            container.update(BiAction(name, self), args)    
 
     def update(self, notification):
         """Update the actuator when an notification is recieved
@@ -151,7 +156,7 @@ class BiActuator:
         """         
         method_name = f'callback_{notification.name}'
         if hasattr(self.__class__, method_name) and callable(getattr(self.__class__, method_name)):
-            getattr(self, method_name)(notification)             
+            getattr(self, method_name)(notification.emitter)             
 
 
 class BiComponent(BiActuator):

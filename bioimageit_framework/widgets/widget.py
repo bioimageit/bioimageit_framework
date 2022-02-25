@@ -1,8 +1,7 @@
 """Define the BiWidget base class
 
 """
-
-from qtpy.QtWidgets import QMessageBox
+from qtpy.QtWidgets import QWidget, QMessageBox
 
 
 class BiWidget:
@@ -12,7 +11,7 @@ class BiWidget:
     
     """
     def __init__(self):
-        self.widget = None # QWidget
+        self.widget = QWidget()
         self.content = {}
         self.connections = {}
 
@@ -26,6 +25,17 @@ class BiWidget:
         if signal in self.connections:
             for connection in self.connections[signal]:
                 connection(self)
+
+    def set_visible(self, value):
+        """Show or hide a widget
+        
+        Parameters
+        ----------
+        value: bool
+            True to set the widget visible, False otherwise
+
+        """
+        self.widget.setVisible(value)            
 
 
 def showInfoBox(text):
