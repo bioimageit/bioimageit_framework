@@ -7,6 +7,8 @@ from .tabwidget import BiTabWidget
 from .toolbars import BiToolBar, QIdToolButton
 from .appbar import BiAppBar, BiAppMainWidget
 from .navbar import BiNavigationBar
+from .tagwidget import BiTagWidget
+from .dictviewer import BiDictViewer
 
 __all__ = ['BiWidget',
            'BiButtonDefault',
@@ -24,4 +26,6 @@ __all__ = ['BiWidget',
            'QIdToolButton',
            'BiAppBar',
            'BiAppMainWidget',
-           'BiNavigationBar']
+           'BiNavigationBar',
+           'BiTagWidget',
+           'BiDictViewer']

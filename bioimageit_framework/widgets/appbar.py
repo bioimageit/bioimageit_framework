@@ -114,12 +114,12 @@ class BiAppMainWidget(BiWidget):
         self._widgets.append({'id': self._count, 'widget': widget})
         self.central_layout.addWidget(widget.widget)
         self.app_bar.add_button(icon, tooltip, self._count, closable)
-        self.open(self._count)
+        self.open(self._count, False)
         self.app_bar.set_checked(self._count, update_current=True)
         return self._count
 
-    def open(self, id):
-        self.app_bar.set_checked(id, update_current=False)        
+    def open(self, id, update_current=True):
+        self.app_bar.set_checked(id, update_current=update_current)        
         for i in range(self.central_layout.count()):
             item = self.central_layout.itemAt(i)
             widget = item.widget()
@@ -131,5 +131,5 @@ class BiAppMainWidget(BiWidget):
 
     def _open(self, origin):
         id = origin.current_tab_id
-        self.open(id)
+        self.open(id, False)
    
