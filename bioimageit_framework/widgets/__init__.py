@@ -1,6 +1,6 @@
 from .buttons import BiButtonDefault, BiButtonPrimary, BiButtonDanger
 from .forms import BiLineEdit, BiForm
-from .composer import BiVComposer, BiHComposer, BiGridComposer
+from .composer import BiVComposer, BiHComposer, BiGridComposer, BiSplittercomposer
 from .widget import BiWidget, showInfoBox
 from .tables import BiTable
 from .tabwidget import BiTabWidget
@@ -19,6 +19,7 @@ __all__ = ['BiWidget',
            'BiVComposer',
            'BiHComposer',
            'BiGridComposer',
+           'BiSplittercomposer',
            'showInfoBox',
            'BiTable',
            'BiTabWidget',

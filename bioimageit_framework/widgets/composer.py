@@ -4,7 +4,8 @@ Composer are Graphical interface layers to compose widgets
 
 
 """
-from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout
+import qtpy.QtCore
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QSplitter
 
 
 class BiVComposer:
@@ -59,3 +60,16 @@ class BiGridComposer:
 
     def add(self, component, row, col, row_span, col_span):
         self.layout.addWidget(component.widget, row, col, row_span, col_span)            
+
+
+class BiSplittercomposer:
+    """Composer with a splitter as a layout"""
+    def __init__(self, orientation="horizontal"):
+        self.widget = QSplitter()
+        if orientation == 'vertical':
+            self.widget.setOrientation(qtpy.QtCore.Qt.Vertical)
+        elif orientation == 'horizontal':    
+            self.widget.setOrientation(qtpy.QtCore.Qt.Horizontal)
+
+    def add(self, component):
+        self.widget.addWidget(component.widget)        

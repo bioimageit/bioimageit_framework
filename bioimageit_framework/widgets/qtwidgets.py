@@ -1,6 +1,6 @@
 from qtpy.QtCore import Qt
 from qtpy.QtCore import (QSize, QRect, QPoint, Signal)
-from qtpy.QtWidgets import QPushButton, QLayout, QWidget, QLayoutItem, QStyle, QSizePolicy
+from qtpy.QtWidgets import QPushButton, QLayout, QWidget, QLayoutItem, QStyle, QSizePolicy, QHBoxLayout, QFileDialog, QLineEdit
 
 
 class QtFlowLayout(QLayout):
@@ -126,3 +126,47 @@ class QtContentButton(QPushButton):
     def emitClicked(self):
         self.clickedId.emit(self.id)
         self.clickedContent.emit(self.content)            
+
+
+class QtFileSelectWidget(QWidget):
+    TextChangedSignal = Signal()
+    TextChangedIdSignal = Signal(int)
+
+    def __init__(self, isDir: bool, parent: QWidget):
+        super().__init__(parent)
+
+        self.id = -1
+        self.isDir = isDir
+
+        layout = QHBoxLayout()
+        layout.setContentsMargins(0,0,0,0)
+        self.setLayout(layout)
+
+        self.lineEdit = QLineEdit()
+        self.lineEdit.setAttribute(Qt.WA_MacShowFocusRect, False)
+        layout.addWidget(self.lineEdit)
+
+        browseButton = QPushButton("...")
+        browseButton.setObjectName("bi-browse-button")
+        layout.addWidget(browseButton, 0, Qt.AlignRight)
+        browseButton.released.connect(self.browseClicked)
+
+    def setText(self, text: str):
+        self.lineEdit.setText(text)
+
+    def text(self):
+        return self.lineEdit.text()
+
+    def browseClicked(self):
+        if self.isDir:
+            dir = QFileDialog.getExistingDirectory(self, "Open a directory")
+            if dir != "":
+                self.lineEdit.setText(dir)
+                self.TextChangedSignal.emit()
+                self.TextChangedIdSignal.emit(self.id)
+        else:
+            file = QFileDialog.getOpenFileName(self, "Open a file", '', "*.*")
+            if file != "":
+                self.lineEdit.setText(file[0])
+                self.TextChangedSignal.emit()
+                self.TextChangedIdSignal.emit(self.id)
