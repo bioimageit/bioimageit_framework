@@ -54,7 +54,7 @@ class BiAppBar(BiWidget):
         self.current_tab_id = id
         self.emit(BiAppBar.OPEN)
 
-    def close(self):
+    def close(self, id):
         self.current_tab_id = id
         self.emit(BiAppBar.CLOSE)    
 
@@ -74,8 +74,8 @@ class BiAppBar(BiWidget):
                 if isinstance(button, BiClosableButton):
                     if (button.id() == id):
                         button.deleteLater()
-                    elif button.id() > id:
-                        button.id = button.id()-1              
+                    #elif button.id() > id:
+                    #    button.id = button.id()-1              
 
     def set_checked(self, id: int, update_current: bool):
         self.current_tab_id = id
@@ -89,8 +89,11 @@ class BiAppBar(BiWidget):
 
 
 class BiAppMainWidget(BiWidget):
+    AppTabCanged = 'app_tab_changed'
+
     def __init__(self):
         super().__init__()
+        self.current_id = 0
         self.app_bar = BiAppBar()
         self.central_area = QWidget()
         self.central_layout = QVBoxLayout()
@@ -108,6 +111,7 @@ class BiAppMainWidget(BiWidget):
         self._count = -1
 
         self.app_bar.connect(BiAppBar.OPEN, self._open)
+        self.app_bar.connect(BiAppBar.CLOSE, self._close)
 
     def add(self, widget, icon, tooltip, closable=False):
         self._count += 1    
@@ -119,6 +123,7 @@ class BiAppMainWidget(BiWidget):
         return self._count
 
     def open(self, id, update_current=True):
+        self.current_id = id
         self.app_bar.set_checked(id, update_current=update_current)        
         for i in range(self.central_layout.count()):
             item = self.central_layout.itemAt(i)
@@ -128,8 +133,22 @@ class BiAppMainWidget(BiWidget):
                     widget.setVisible(True)
                 else:
                     widget.setVisible(False) 
+        self.emit(BiAppMainWidget.AppTabCanged)            
 
     def _open(self, origin):
         id = origin.current_tab_id
         self.open(id, False)
    
+    def _close(self, origin):
+        idx = origin.current_tab_id
+        print('close button id=', idx)
+        self.app_bar.remove_button(idx)
+        
+        for i in range(self.central_layout.count()):
+            item = self.central_layout.itemAt(i)
+            widget = item.widget()
+            if widget == self._widgets[idx]:
+                widget.deleteLater()
+
+        self._widgets.pop(idx)
+        self.open(0, True)

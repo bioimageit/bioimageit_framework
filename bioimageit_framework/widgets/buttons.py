@@ -1,8 +1,9 @@
 import qtpy.QtCore
 from qtpy.QtCore import Signal
+from qtpy.QtGui import QIcon
 from qtpy.QtWidgets import QWidget, QPushButton, QMessageBox, QVBoxLayout
 
-from bioimageit_framework.framework import BiComponent
+from bioimageit_framework.theme import BiThemeAccess
 from .widget import BiWidget
 
 
@@ -101,6 +102,7 @@ class BiClosableButton(QPushButton):
             layout.setContentsMargins(0,0,0,0)
             closeButton = QPushButton()
             closeButton.setObjectName("bi-close-button")
+            closeButton.setIcon(QIcon(BiThemeAccess.instance().icon('close')))
             closeButton.setFixedSize(12,12)
             layout.addWidget(closeButton, 1, qtpy.QtCore.Qt.AlignTop | qtpy.QtCore.Qt.AlignRight)
             self.setLayout(layout)

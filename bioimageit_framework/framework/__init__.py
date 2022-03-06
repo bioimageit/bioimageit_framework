@@ -1,6 +1,7 @@
 from .exceptions import CommandArgsError
 from .framework import (BiAction, BiContainer, BiActuator, 
                         BiComponent, BiConnectome)
+from .observer import (BiGuiObserver)                        
 
 __all__ = ['CommandArgsError',
            'BiObject',
@@ -8,4 +9,5 @@ __all__ = ['CommandArgsError',
            'BiContainer',
            'BiActuator',
            'BiComponent',
-           'BiConnectome']
+           'BiConnectome',
+           'BiGuiObserver']
