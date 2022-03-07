@@ -1,10 +1,10 @@
-.. BioImageIT GUI documentation master file, created by
+.. BioImageIT framework documentation master file, created by
    sphinx-quickstart on Mon May 18 17:15:17 2020.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to BioImageIT GUI's documentation!
-==========================================
+Welcome to BioImageIT framework's documentation!
+================================================
 
 .. toctree::
    :maxdepth: 2
@@ -12,11 +12,7 @@ Welcome to BioImageIT GUI's documentation!
 
    intro
    install
-   tutorial_experiment
-   tutorial_finder
-   tutorial_runner
-   tutorial_pipeline
-   modules
+   get_started
 
 Indices and tables
 ==================

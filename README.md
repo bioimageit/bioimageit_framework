@@ -10,6 +10,7 @@ The documentation is available [here](https://bioimageit.github.io/bioimageit_fr
 
 The documentation is written with Sphinx. To build is run the commands:
 ```bash
+pip install sphinx-rtd-theme
 cd docs
 mkdir build
 sphinx-build -b html ./source ./build
