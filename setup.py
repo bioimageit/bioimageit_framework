@@ -20,6 +20,7 @@ setup(
     license=license,
     packages=find_packages(exclude=('tests', 'docs')),
     install_requires=[
+        "bioimageit_viewer>=0.1.0",
         "qtpy"
     ],
     )
