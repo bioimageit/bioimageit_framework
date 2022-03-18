@@ -9,6 +9,7 @@ from .appbar import BiAppBar, BiAppMainWidget
 from .navbar import BiNavigationBar
 from .tagwidget import BiTagWidget
 from .dictviewer import BiDictViewer
+from .qtwidgets import QtContentButton
 
 __all__ = ['BiWidget',
            'BiButtonDefault',
@@ -29,4 +30,5 @@ __all__ = ['BiWidget',
            'BiAppMainWidget',
            'BiNavigationBar',
            'BiTagWidget',
-           'BiDictViewer']
+           'BiDictViewer',
+           'QtContentButton']

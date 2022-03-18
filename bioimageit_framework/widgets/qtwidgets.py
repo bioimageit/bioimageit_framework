@@ -116,6 +116,7 @@ class QtFlowLayout(QLayout):
 class QtContentButton(QPushButton):
     clickedId = Signal(int)
     clickedContent = Signal(str)
+    clickedInfo = Signal(str, str)
 
     def __init__(self, title: str, parent: QWidget = None):
         super().__init__(title, parent)
@@ -125,7 +126,8 @@ class QtContentButton(QPushButton):
 
     def emitClicked(self):
         self.clickedId.emit(self.id)
-        self.clickedContent.emit(self.content)            
+        self.clickedContent.emit(self.content)    
+        self.clickedInfo.emit(str(self.id), self.content)         
 
 
 class QtFileSelectWidget(QWidget):
