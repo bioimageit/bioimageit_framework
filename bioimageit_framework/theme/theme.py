@@ -40,7 +40,7 @@ class BiThemeSheets:
                 BiThemeSheets.TABLES,
                 BiThemeSheets.TOOLBARS,
                 BiThemeSheets.APP
-               ]
+               ]     
 
 
 class BiTheme:
@@ -79,7 +79,7 @@ class BiTheme:
         name: str
             Name of the stylesheet qss file
 
-        """
+        """ 
         widget.setStyleSheet(self.style(name))
 
     def set_stylesheet(self, app, sheet_names):
@@ -90,7 +90,8 @@ class BiTheme:
             file.close()
 
         for icon in BiThemeIcons.icons():
-            style_str = style_str.replace(f'%{icon}%', os.path.join(self.theme_dir, icon)) 
+            style_str = style_str.replace(f'%{icon}%', f'"{os.path.join(self.theme_dir, icon)}"')
+            style_str = style_str.replace('\\', '\\\\')
 
         app.setStyleSheet(style_str)    
 
