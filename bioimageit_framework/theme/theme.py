@@ -90,8 +90,8 @@ class BiTheme:
             file.close()
 
         for icon in BiThemeIcons.icons():
-            style_str = style_str.replace(f'%{icon}%', f'"{os.path.join(self.theme_dir, icon)}"')
-            style_str = style_str.replace('\\', '\\\\')
+            icon_path = os.path.join(self.theme_dir, icon).replace('\\', '/')
+            style_str = style_str.replace(f'%{icon}%', f'"{icon_path}"')
 
         app.setStyleSheet(style_str)    
 
