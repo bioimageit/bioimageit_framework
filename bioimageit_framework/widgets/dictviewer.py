@@ -28,6 +28,7 @@ class BiDictViewer(BiWidget):
         """ 
         self.model = TreeModel(["Key", "Value"], data)
         self.tree.setModel(self.model)
+        self.tree.expandAll()
 
 
 class TreeModel(qtpy.QtCore.QAbstractItemModel):
