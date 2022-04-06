@@ -8,6 +8,7 @@ class QtFlowLayout(QLayout):
         super().__init__(parent)
         self.hSpace = hSpacing
         self.vSpace = vSpacing
+        self.margin = margin
         self.setContentsMargins(margin, margin, margin, margin)
         self.itemList = []
 
@@ -64,7 +65,7 @@ class QtFlowLayout(QLayout):
         for item in self.itemList:
             size = size.expandedTo(item.minimumSize())
 
-        size += QSize(2*self.margin(), 2*self.margin())
+        size += QSize(2*self.margin, 2*self.margin)
         return size
 
     def doLayout(self, rect: QRect, testOnly: bool) -> int:
