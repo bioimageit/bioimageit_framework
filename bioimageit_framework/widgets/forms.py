@@ -1,8 +1,7 @@
-from PySide2.QtWidgets import QVBoxLayout
 import qtpy.QtCore
 from qtpy.QtWidgets import (QLineEdit, QSpinBox, QComboBox, QGroupBox, 
                             QHBoxLayout, QPushButton, QFileDialog,
-                            QWidget, QGridLayout, QLabel, QGroupBox)
+                            QWidget, QGridLayout, QLabel, QGroupBox, QVBoxLayout)
 
 from .widget import BiWidget
 
