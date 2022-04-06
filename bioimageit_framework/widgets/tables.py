@@ -1,7 +1,6 @@
 
 
-from PySide2.QtWidgets import QPushButton, QTableWidget
-from qtpy.QtWidgets import QTableWidget, QAbstractItemView, QTableWidgetItem
+from qtpy.QtWidgets import QTableWidget, QAbstractItemView, QTableWidgetItem, QPushButton, QTableWidget
 
 from bioimageit_framework.widgets import BiButtonPrimary
 
